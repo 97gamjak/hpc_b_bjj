@@ -45,6 +45,7 @@ int main() {
 
     if (numGPUs < 2) {
         printf("This program requires 2 GPUs to execute, found only %d.\nExiting...\n", numGPUs);
+        return EXIT_FAILURE;
     }
 
     long nx = 4096;
