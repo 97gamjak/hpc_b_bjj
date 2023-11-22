@@ -1,7 +1,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "cuda_error_check.h"
+#include "../cuda_error_check.h"
 
 // index column major, so that arr[x,y] and arr[x, y+1] are consecutive in memory
 #define index(i_x, i_y, n_y) ((i_y) + (i_x) * (n_y))
