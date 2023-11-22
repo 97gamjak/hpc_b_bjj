@@ -1,7 +1,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "../cuda_error_check.h"
+#include "cuda_error_check.h"
 
 // index column major, so that arr[x,y] and arr[x, y+1] are consecutive in memory
 #define index(i_x, i_y, n_y) ((i_y) + (i_x) * (n_y))
@@ -41,7 +41,7 @@ __global__ void k_init(long nx, long ny, double hx, double hy, double *in, int b
 
 int main() {
     int numGPUs;
-    gpuErrorCheck(cudaGetDeviceCount(&numGPUs), true);
+    gpuErrorCheck(cudaGetDeviceCount(&numGPUs));
 
     if (numGPUs < 2) {
         printf("This program requires 2 GPUs to execute, found only %d.\nExiting...\n", numGPUs);
@@ -74,43 +74,43 @@ int main() {
     double *d_out[numGPUs];
 
     for (int dev = 0; dev < numGPUs; dev++) {
-        gpuErrorCheck(cudaSetDevice(dev), true);
+        gpuErrorCheck(cudaSetDevice(dev));
 
-        gpuErrorCheck(cudaStreamCreate(&streams[dev]), true);
+        gpuErrorCheck(cudaStreamCreate(&streams[dev]));
 
         printf("Length of local buffer: %ld\n", nx_local * ny);
 
         // Initialization.
-        gpuErrorCheck(cudaMalloc(&d_in[dev], sizeof(double) * nx_local * ny), true);
-        gpuErrorCheck(cudaMalloc(&d_out[dev], sizeof(double) * nx_local * ny), true);
+        gpuErrorCheck(cudaMalloc(&d_in[dev], sizeof(double) * nx_local * ny));
+        gpuErrorCheck(cudaMalloc(&d_out[dev], sizeof(double) * nx_local * ny));
 
         int block_x_offset = nx_local * dev;
 
         k_init<<<num_blocks, threads_per_block, 0, streams[dev]>>>(nx_local, ny, hx, hy, d_in[dev], block_x_offset);
 
-        gpuErrorCheck(cudaEventCreate(&start[dev]), true);
-        gpuErrorCheck(cudaEventCreate(&stop[dev]), true);
+        gpuErrorCheck(cudaEventCreate(&start[dev]));
+        gpuErrorCheck(cudaEventCreate(&stop[dev]));
 
         // Do the actual computation.
-        gpuErrorCheck(cudaEventRecord(start[dev], streams[dev]), true);
+        gpuErrorCheck(cudaEventRecord(start[dev], streams[dev]));
 
         for (long k = 0; k < 2 * ny; k++) {
             k_upwind<<<num_blocks, threads_per_block, 0, streams[dev]>>>(nx, ny, d_in[dev], d_out[dev]);
             swap(d_in[dev], d_out[dev]);
         }
 
-        gpuErrorCheck(cudaEventRecord(stop[dev], streams[dev]), true);
+        gpuErrorCheck(cudaEventRecord(stop[dev], streams[dev]));
     }
 
     // Check the result.
     double *h_in, *h_out;
-    gpuErrorCheck(cudaMallocHost(&h_in, sizeof(double) * N), true);
-    gpuErrorCheck(cudaMallocHost(&h_out, sizeof(double) * N), true);
+    gpuErrorCheck(cudaMallocHost(&h_in, sizeof(double) * N));
+    gpuErrorCheck(cudaMallocHost(&h_out, sizeof(double) * N));
 
     for (int dev = 0; dev < numGPUs; dev++) {
-        gpuErrorCheck(cudaSetDevice(dev), true);
-        gpuErrorCheck(cudaStreamSynchronize(streams[dev]), true);
-        gpuErrorCheck(cudaEventElapsedTime(&time[dev], start[dev], stop[dev]), true);
+        gpuErrorCheck(cudaSetDevice(dev));
+        gpuErrorCheck(cudaStreamSynchronize(streams[dev]));
+        gpuErrorCheck(cudaEventElapsedTime(&time[dev], start[dev], stop[dev]));
         cout << "Runtime GPU " << dev << ": " << time[dev] * 1e-3 << " s" << endl;
 
         int block_x_offset = nx_local * dev;
@@ -119,10 +119,10 @@ int main() {
     }
 
     for (int dev = 0; dev < numGPUs; dev++) {
-        gpuErrorCheck(cudaSetDevice(dev), true);
-        gpuErrorCheck(cudaStreamSynchronize(streams[dev]), true);
-        gpuErrorCheck(cudaMemcpy(h_in + N / numGPUs * dev, d_in[dev], sizeof(double) * N / numGPUs, cudaMemcpyDeviceToHost), true);
-        gpuErrorCheck(cudaMemcpy(h_out + N / numGPUs * dev, d_out[dev], sizeof(double) * N / numGPUs, cudaMemcpyDeviceToHost), true);
+        gpuErrorCheck(cudaSetDevice(dev));
+        gpuErrorCheck(cudaStreamSynchronize(streams[dev]));
+        gpuErrorCheck(cudaMemcpy(h_in + N / numGPUs * dev, d_in[dev], sizeof(double) * N / numGPUs, cudaMemcpyDeviceToHost));
+        gpuErrorCheck(cudaMemcpy(h_out + N / numGPUs * dev, d_out[dev], sizeof(double) * N / numGPUs, cudaMemcpyDeviceToHost));
     }
 
     double error = 0.0;
