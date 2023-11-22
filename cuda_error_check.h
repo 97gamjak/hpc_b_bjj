@@ -19,7 +19,7 @@ gpuErrorCheck(cudaMalloc(...), true);  // if fails, print message and abort
 
 inline void gpuAssert(cudaError_t code, const char* file, int line, bool abort = true) {
     if (code != cudaSuccess) {
-        fprintf(stderr, "assert:%s%s%d\n", cudaGetErrorString(code), file, line);
+        fprintf(stderr, "ASSERT: \"%s\"\n\t> %s:%d\n", cudaGetErrorString(code), file, line);
         if (abort) {
             exit(code);
         }
