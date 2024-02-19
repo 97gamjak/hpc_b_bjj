@@ -77,6 +77,8 @@ int main(int argc, char *argv[]) {
 
     handle_error(cudaMemcpy(h_c, d_c, bytes, cudaMemcpyDeviceToHost), "copy d_c to host");
 
+    compute_max_err(h_c, n);
+
     free(h_a);
     free(h_b);
     free(h_c);
