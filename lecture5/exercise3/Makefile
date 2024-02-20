@@ -1,11 +1,11 @@
 NVCC = nvcc
 NVCCFLAGS = -O3
-LDFLAGS = -lcufft
+LDFLAGS = -lcusparse
 
-all: cufft
+all: cusparse
 
-cufft: cufft.cpp
+cusparse: cusparse.cpp
 	$(NVCC) $(NVCCFLAGS) -o $@ $^ $(LDFLAGS)
 
 clean:
-	rm -f cufft
+	rm -f cusparse

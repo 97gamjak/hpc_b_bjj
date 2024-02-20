@@ -5,4 +5,4 @@
 #SBATCH -t 00:05:00 # maximal run time of the job
 module load cuda
 
-./cufft
+../matmul
