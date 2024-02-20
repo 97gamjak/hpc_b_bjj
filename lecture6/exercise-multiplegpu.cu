@@ -1,7 +1,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "cuda_error_check.h"
+#include "../cuda_error_check.h"
 
 // index column major, so that arr[x,y] and arr[x, y+1] are consecutive in memory
 #define index(i_x, i_y, n_y) ((i_y) + (i_x) * (n_y))
@@ -44,7 +44,7 @@ int main() {
     gpuErrorCheck(cudaGetDeviceCount(&numGPUs));
 
     if (numGPUs < 2) {
-        printf("This program requires 2 GPUs to execute, found only %d.\nExiting...\n", numGPUs);
+        printf("This program requires at least 2 GPUs to execute, found only %d.\nExiting...\n", numGPUs);
         return EXIT_FAILURE;
     }
 
