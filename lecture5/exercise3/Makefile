@@ -1,6 +1,6 @@
 NVCC = nvcc
-#NVCCFLAGS = -O3
-NVCCFLAGS = -lineinfo
+NVCCFLAGS = -O3
+#NVCCFLAGS = -lineinfo #for debugging
 LDFLAGS = -lcusparse
 
 all: cusparse
