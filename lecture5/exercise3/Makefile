@@ -1,11 +1,12 @@
 NVCC = nvcc
-NVCCFLAGS = -O3
+#NVCCFLAGS = -O3
+NVCCFLAGS = -lineinfo
 LDFLAGS = -lcusparse
 
 all: cusparse
 
-cusparse: cusparse.cpp
-	$(NVCC) $(NVCCFLAGS) -o $@ $^ $(LDFLAGS)
+cusparse: cusparse.cu ../../cuda_error_check.h
+	$(NVCC) $(NVCCFLAGS) -o $@ $< $(LDFLAGS)
 
 clean:
 	rm -f cusparse
