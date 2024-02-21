@@ -1,5 +1,11 @@
-cuBlas_test: cuBlas_test.cu ../../cuda_error_check.h
-	nvcc cuBlas_test.cu -o cuBlas_test -O3 -lcublas
+CXX = nvcc
+CXXFLAGS = -O3
+LDFLAGS = -lcublas
+
+all: matvec
+
+matvec: matvec.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 clean:
-	rm cuBlas_test
+	rm -f matvec

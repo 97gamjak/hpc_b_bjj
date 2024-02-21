@@ -1,5 +1,11 @@
-cuFFT: cuFFT.cu
-	nvcc cuFFT.cu -o cuFFT -O3 -lcufft
+NVCC = nvcc
+NVCCFLAGS = -O3
+LDFLAGS = -lcufft
+
+all: cufft
+
+cufft: cufft.cpp
+	$(NVCC) $(NVCCFLAGS) -o $@ $^ $(LDFLAGS)
 
 clean:
-	rm cuFFT
+	rm -f cufft
