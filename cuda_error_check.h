@@ -21,11 +21,9 @@ gpuErrorCheck(cudaMalloc(...), false);        // if fails, print message and con
 #define gpuErrorCheck(...) \
     { gpuAssert(__VA_ARGS__, __FILE__, __LINE__); }
 
-
-
 inline void gpuAssert(cudaError_t code, bool abort, const char* file, int line) {
     if (code != cudaSuccess) {
-        fprintf(stderr, "ASSERT: \"%s\"\n\t> %s:%d\n", cudaGetErrorString(code), file, line);
+        fprintf(stderr, "CUDA ASSERT: \"%s\"\n\t> %s:%d\n", cudaGetErrorString(code), file, line);
         if (abort) {
             exit(code);
         }
@@ -33,5 +31,5 @@ inline void gpuAssert(cudaError_t code, bool abort, const char* file, int line) 
 }
 
 inline void gpuAssert(cudaError_t code, const char* file, int line) {
-	return gpuAssert(code, true, file, line);
+    return gpuAssert(code, true, file, line);
 }
