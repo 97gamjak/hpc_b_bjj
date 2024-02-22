@@ -9,6 +9,10 @@ FetchContent_Declare(kokkos
 
 FetchContent_MakeAvailable(kokkos)
 add_executable(vecadd vecadd.cpp)
+add_executable(vecadd_3d vecadd_3d.cpp)
 add_dependencies(vecadd kokkos)
+add_dependencies(vecadd_3d kokkos)
 target_include_directories(vecadd PRIVATE ${Kokkos_INCLUDE_DIRS_RET})
 target_link_libraries(vecadd PRIVATE kokkos)
+target_include_directories(vecadd_3d PRIVATE ${Kokkos_INCLUDE_DIRS_RET})
+target_link_libraries(vecadd_3d PRIVATE kokkos)
