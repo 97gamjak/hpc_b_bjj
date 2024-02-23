@@ -14,11 +14,10 @@ __global__ void globFunction(int *arr) {
     // read values and increase if not already 2
     if(arr[idx] != 2) {
         local_array[threadIdx.x] = arr[idx] + 1;
-        __syncthreads();
     } else {
         local_array[threadIdx.x] = arr[idx];
-        __syncthreads();
     }
+    __syncthreads();
 
 
     // read the results of neighbor element
