@@ -3,8 +3,14 @@
 #include <cuda_runtime.h>
 #include <math.h>
 #include <cuda.h>
+#include "../../cuda_error_check.h"
 
 using namespace std;
+
+#define CUFFT_ASSERT(x) if ((x) != CUFFT_SUCCESS) { \
+    cout << "Error at " << __FILE__ << ":" << __LINE__ << endl; \
+    exit(1); \
+}
 
 void initialize_x(double *x, int n) {
     for (int i = 0; i < n; i++) {
@@ -12,54 +18,52 @@ void initialize_x(double *x, int n) {
     }
 }
 
-void initialize_f_hat(cufftComplex *f_hat, double *x, int n) {
+void initialize_f_hat(cufftComplex *f, double *x, int n) {
     for (int i = 0; i < n; i++) {
-        f_hat[i].x = sin(x[i] * 2 * M_PI);
+        f[i].x = x[i] * x[i] * x[i];
     }
 }
 
-void check_plan(cufftHandle plan) {
-    if (plan == CUFFT_SETUP_FAILED) {
-        cout << "ERROR: plan creation failed." << endl;
-        exit(1);
-    }
-}
-
-
-// ------------------ Main ------------------
-int main() {
-    int n = 1 << 3;
-    double *x;
-    cufftComplex *f_hat, *u_hat;
-
-    cudaMallocManaged(&x, n * sizeof(double));
-    cudaMallocManaged(&f_hat, n * sizeof(cufftComplex));
-    cudaMallocManaged(&u_hat, n * sizeof(cufftComplex));
-
-    initialize_x(x, n);
-    initialize_f_hat(f_hat, x, n);
-
-    for (int i = 0; i < n; i++) {
-        cout << f_hat[i].x << " ";
-    }
-    cout << endl;
-
-    cufftHandle plan;
-    cufftPlan1d(&plan, n, CUFFT_D2Z, 1);
-    check_plan(plan);
-
-    // transform f to f_hat
-    cufftExecC2C(plan, f_hat, f_hat, CUFFT_FORWARD);
-
-    // Initialize k vector
-    double *k;
-    cudaMallocManaged(&k, n * sizeof(double));
-    for (int i = 0; i <= n/2 - 1; i++) {
+void init_k(double *k, int n) {
+    for (int i = 0; i < n/2; i++) {
         k[i] = i;
     }
     for (int i = n/2; i < n; i++) {
         k[i] = i - n;
     }
+}
+
+
+// ------------------ Main ------------------
+int main(int argc, char **argv) {
+    int n = 1 << 3;
+    double *x;
+    cufftComplex *f, *f_hat, *u, *u_hat;
+
+    gpuErrorCheck(cudaMallocManaged(&x, n * sizeof(double)));
+    gpuErrorCheck(cudaMallocManaged(&f, n * sizeof(cufftComplex)));
+    gpuErrorCheck(cudaMallocManaged(&f_hat, n * sizeof(cufftComplex)));
+    gpuErrorCheck(cudaMallocManaged(&u, n * sizeof(cufftComplex)));
+    gpuErrorCheck(cudaMallocManaged(&u_hat, n * sizeof(cufftComplex)));
+
+    initialize_x(x, n);
+    initialize_f_hat(f, x, n);
+
+    for (int i = 0; i < n; i++) {
+        cout << f[i].x << " ";
+    }
+    cout << endl;
+
+    cufftHandle handle;
+    CUFFT_ASSERT(cufftPlan1d(&handle, n, CUFFT_C2C, 1));
+
+    // transform f to f_hat
+    CUFFT_ASSERT(cufftExecC2C(handle, f, f_hat, CUFFT_FORWARD));
+
+    // Initialize k vector
+    double *k;
+    gpuErrorCheck(cudaMallocManaged(&k, n * sizeof(double)));
+    init_k(k, n);
 
     for (int i = 0; i < n; i++) {
         if (k[i] != 0) {
@@ -72,20 +76,23 @@ int main() {
     }
 
     // transform u_hat to u
-    cufftExecC2C(plan, u_hat, u_hat, CUFFT_INVERSE);
+    CUFFT_ASSERT(cufftExecC2C(handle, u_hat, u, CUFFT_INVERSE));
 
+    // Print u values
     for (int i = 0; i < n; i++) {
-        cout << u_hat[i].x << " ";
+        cout << u[i].x << " ";
     }
     cout << endl;
 
     // Free the memory
-    cudaFree(x);
-    cudaFree(f_hat);
-    cudaFree(u_hat);
+    gpuErrorCheck(cudaFree(x));
+    gpuErrorCheck(cudaFree(f));
+    gpuErrorCheck(cudaFree(f_hat));
+    gpuErrorCheck(cudaFree(u));
+    gpuErrorCheck(cudaFree(u_hat));
 
-    // Destroy plan
-    cufftDestroy(plan);
+    // Destroy handle
+    CUFFT_ASSERT(cufftDestroy(handle));
 
-    return 0;
+    return EXIT_SUCCESS;
 }
