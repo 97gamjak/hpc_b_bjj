@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
     Kokkos::initialize(argc, argv);
     {
         int n1 = 1 << 9, n2 = 1 << 9, n3 = 1 << 9;
-        Kokkos::View<double ***, Kokkos::RightLayout> d_x("x", n1, n2, n3), d_y("y", n1, n2, n3), d_z("z", n1, n2, n3);
+        Kokkos::View<double ***, Kokkos::LayoutRight> d_x("x", n1, n2, n3), d_y("y", n1, n2, n3), d_z("z", n1, n2, n3);
         auto h_z = Kokkos::create_mirror_view(d_z);
         auto md_range = Kokkos::MDRangePolicy<Kokkos::Rank<3>>({0, 0, 0}, {n1, n2, n3});
 
