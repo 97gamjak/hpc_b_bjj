@@ -38,7 +38,7 @@ void compute_max_err(double *result, int n) {
 }
 
 int main(int argc, char *argv[]) {
-    int n = 100000000;  // approx 2.4 GiB for a,b and c
+    int n = 1<<25;  // approx 2.4 GiB for a,b and c
 
     if (argc > 1) {
         int tmp = atoi(argv[1]);
