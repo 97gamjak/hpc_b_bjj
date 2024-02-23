@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
     cudaError_t error_id = cudaGetDeviceCount(&deviceCount);
     if (error_id != cudaSuccess)
     {
-        printf("cudaGetDeviceCount returned %d\n-> %s\n", (int)error_id, cudaGetErrorString(error_id));
-        printf("Result = FAIL\n");
+        cout << "cudaGetDeviceCount returned " << (int)error_id << endl << "-> " << cudaGetErrorString(error_id) << endl;
+        cout << "Result = FAIL" << endl;
         exit(EXIT_FAILURE);
     }
 
