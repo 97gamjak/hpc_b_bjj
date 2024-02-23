@@ -10,7 +10,7 @@ int main()
         cudaSetDevice(dev);
         cudaDeviceProp deviceProp;
         cudaGetDeviceProperties(&deviceProp, dev);
-        printf("\nDevice %d: \"%s\"\n\t> Max gridsize: %d\n\t> Max threadsPerBlock: %d\n", dev, deviceProp.name, deviceProp.maxGridSize, deviceProp.maxThreadsPerBlock);
+        printf("\nDevice %ld: \"%s\"\n\t> Max gridsize: %ld\n\t> Max threadsPerBlock: %ld\n", dev, deviceProp.name, deviceProp.maxGridSize, deviceProp.maxThreadsPerBlock);
     }
     return 0;
 }
