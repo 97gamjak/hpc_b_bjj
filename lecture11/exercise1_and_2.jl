@@ -72,14 +72,15 @@ function bench_gpu(A, num_iterations)
 end
 
 function bench_gpu2(A, num_iterations)
-    @benchmark power_iteration_gpu($A, $num_iterations)
+    @benchmark power_iteration_gpu2($A, $num_iterations)
 end
 
 function bench_cpu(A, num_iterations)
     @benchmark power_iteration_cpu($A, $num_iterations)
 end
 
-A = rand(3, 3)
+n = 1 << 12
+A = rand(n, n)
 x_cpu = power_iteration_cpu(A, 1000)
 x_gpu = power_iteration_gpu(A, 1000)
 x_gpu2 = power_iteration_gpu2(A, 1000)
