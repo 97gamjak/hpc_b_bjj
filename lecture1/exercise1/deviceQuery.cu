@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
         cudaSetDevice(dev);
         cudaDeviceProp deviceProp;
         cudaGetDeviceProperties(&deviceProp, dev);
-<<<<<<< HEAD
         cout << "-------------------------------------------------------------" << endl;
         cout << "Device " << dev << ": \"" << deviceProp.name << "\"" << endl;
         cout << "\tCUDA Driver and Runtime version: " << deviceProp.major << "." << deviceProp.minor << endl;
@@ -27,9 +26,6 @@ int main(int argc, char *argv[])
         cout << "\tUVA support: " << (deviceProp.unifiedAddressing ? "Yes" : "No") << endl;
         cout << "-------------------------------------------------------------" << endl;
         
-=======
-        printf("\nDevice %ld: \"%s\"\n\t> Max gridsize: %ld\n\t> Max threadsPerBlock: %ld\n", dev, deviceProp.name, deviceProp.maxGridSize, deviceProp.maxThreadsPerBlock);
->>>>>>> 6dfd962fa0a7a17ab01f3bd8cc61687f84501b17
     }
     return EXIT_SUCCESS;
 }

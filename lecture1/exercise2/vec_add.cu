@@ -11,7 +11,7 @@ __global__ void vec_add(double *a, double *b, double *c, long n) {
         c[id] = a[id] + b[id];
 }
 
-void initialize(double *arr, int size, const std::function<double(int)> &fun) {
+void initialize(double *arr, int size, const int std::function<double(int)> &fun) {
     for (int i = 0; i < size; i++) {
         arr[i] = fun(i);
     }
