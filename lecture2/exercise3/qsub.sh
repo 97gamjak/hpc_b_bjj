@@ -7,4 +7,4 @@ module load cuda
 
 make
 
-./cos $(cat cos.txt)
+./heat_stencil_cuda
