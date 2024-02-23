@@ -5,4 +5,8 @@
 #SBATCH -t 00:05:00 # maximal run time of the job
 module load cuda
 
-./exercise-multiplegpu
+make
+
+./exercise-efficiency >new_performance.dat
+
+./exercise-efficiency_original >original_performance.dat

@@ -1,5 +1,5 @@
 CC=gcc
-CC_FLAGS=-O3 -Wall -Wextra -pedantic
+CC_FLAGS=-O3 -Wall -Wextra -pedantic -std=c99
 NVCC=nvcc
 NVCC_FLAGS=-O3
 
