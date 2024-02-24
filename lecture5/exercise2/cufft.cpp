@@ -14,18 +14,18 @@ using namespace std;
 
 void initialize_x(double *x, int n) {
     for (int i = 0; i < n; i++) {
-        x[i] = i * (1.0 / (n + 1));
+        x[i] = i * (1.0 / (n)) * (2 * M_PI);
     }
 }
 
 void initialize_f_hat(cufftComplex *f, double *x, int n) {
     for (int i = 0; i < n; i++) {
-        f[i].x = x[i] * x[i] * x[i];
+        f[i].x = sin(x[i]);
     }
 }
 
 void init_k(double *k, int n) {
-    for (int i = 0; i < n/2; i++) {
+    for (int i = 1; i < n/2; i++) {
         k[i] = i;
     }
     for (int i = n/2; i < n; i++) {
@@ -59,24 +59,21 @@ int main(int argc, char **argv) {
 
     // transform f to f_hat
     CUFFT_ASSERT(cufftExecC2C(handle, f, f_hat, CUFFT_FORWARD));
+    cudaDeviceSynchronize();
 
     // Initialize k vector
     double *k;
     gpuErrorCheck(cudaMallocManaged(&k, n * sizeof(double)));
     init_k(k, n);
 
-    for (int i = 0; i < n; i++) {
-        if (k[i] != 0) {
-            u_hat[i].x = -f_hat[i].x / (4 * M_PI * M_PI * k[i] * k[i]);
-            u_hat[i].y = -f_hat[i].y / (4 * M_PI * M_PI * k[i] * k[i]);
-        } else {
-            u_hat[i].x = 0;
-            u_hat[i].y = 0;
-        }
+    for (int i = 1; i < n; i++) {
+        u_hat[i].x = -f_hat[i].x / (4 * M_PI * M_PI * k[i] * k[i]);
+        u_hat[i].y = -f_hat[i].y / (4 * M_PI * M_PI * k[i] * k[i]);
     }
 
     // transform u_hat to u
     CUFFT_ASSERT(cufftExecC2C(handle, u_hat, u, CUFFT_INVERSE));
+    cudaDeviceSynchronize();
 
     // Print u values
     for (int i = 0; i < n; i++) {
