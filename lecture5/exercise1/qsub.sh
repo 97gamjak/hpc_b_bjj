@@ -9,7 +9,7 @@ if [ -f time.dat ]; then
     rm time.dat
 fi
 
-for i in $(seq 1 10); do
-    ./matvec i >tmp
+for i in $(seq 1 15); do
+    ./matvec $i >tmp
     cat tmp | grep "time" | awk '{print '$i', "   ", $3}' >>time.dat
 done
