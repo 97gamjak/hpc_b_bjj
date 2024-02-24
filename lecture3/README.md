@@ -1,24 +1,26 @@
-# Lecture 10 - Exercise 1
-## Usage
+#Lecture 3
+##Original version
 
-First of all to build the different executables perform following camke build steps:
+array-size = 10⁶
+Numerical error: 6.88338e-15
+6.20209 s
 
-```bash
-mkdir build_gpu
-cd build_gpu
-cmake -DKokkos_ENABLE_CUDA ..
+##Enhanced version
 
-mkdir build_cpu
-cd build_cpu
-cmake ..
-```
+array-size = 10⁶
+Numerical error: 6.56142e-14
+0.0228248 s
 
-Then perform following steps for building the kokkos-tools in the root folder of this exercise
+##Performance Analysis
 
-```bash
-git clone https://github.com/kokkos/kokkos-tools
-cd kokkos-tools/
-mkdir build
-cd build
-cmake ../
-```
+###V100
+
+theoretical peak performance = 7.45 TFLOPS/s
+measured original performance = 0.25 TFLOPS/s (n=10⁹)
+measured enhanced performance = 0.25 TFLOPS/s (n=10⁹)
+
+###A100
+
+theoretical peak performance = 7.45 TFLOPS/s
+measured original performance = 0.25 TFLOPS/s (n=10⁹)
+measured enhanced performance = 0.42 TFLOPS/s (n=10⁹)
