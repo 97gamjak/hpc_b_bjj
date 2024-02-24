@@ -34,6 +34,10 @@ int main() {
     double h_result = 0.0;
     double *h_vec, *d_vec, *d_tmp;
 
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+
     cudaMallocHost(&h_vec, sizeof(double)*n);
     cudaMalloc(&d_vec, sizeof(double)*n);
     cudaMalloc(&d_tmp, sizeof(double)*(n/256));
@@ -47,6 +51,7 @@ int main() {
     int blockSize = 256;
     int numBlocks = (n + blockSize - 1) / blockSize;
 
+    cudaEventRecord(start, 0);
     while(numBlocks > 1) {
         k_sum<<<numBlocks, blockSize, blockSize*sizeof(double)>>>(n, d_vec, d_tmp);
         cudaDeviceSynchronize();
@@ -54,6 +59,7 @@ int main() {
         d_vec = d_tmp;
         numBlocks = (n + blockSize - 1) / blockSize;
     }
+    cudaEventRecord(stop, 0);
 
     k_sum<<<1, blockSize, blockSize*sizeof(double)>>>(n, d_vec, d_tmp);
 
@@ -68,6 +74,14 @@ int main() {
         cout << "The computed result does not match with the expected result ("
              << pow(M_PI,2)/6.0 << ")" << endl;
     }
+
+    cudaEventSynchronize(stop);
+    float time;
+    cudaEventElapsedTime(&time, start, stop);
+    cout << time * 1e-3 << " s" << endl;
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
 
     // Free the memory.
     cudaFreeHost(h_vec);
