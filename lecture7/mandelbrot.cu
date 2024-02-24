@@ -109,7 +109,7 @@ inline __host__ __device__ complex operator/
 								 (a.im * b.re - b.im * a.re) * invabs2);
 }  // operator/
 
-#define MAX_DWELL 1024
+#define MAX_DWELL 1024*16
 #define BS 256
 /** computes the dwell for a single pixel */
 __device__ int pixel_dwell

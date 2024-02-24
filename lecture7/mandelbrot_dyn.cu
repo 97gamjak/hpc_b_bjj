@@ -120,7 +120,7 @@ inline __host__ __device__ complex operator/
 								 (a.im * b.re - b.im * a.re) * invabs2);
 }  // operator/
 
-#define MAX_DWELL 1024
+#define MAX_DWELL 1024*16
 /** block size along */
 #define BSX 64
 #define BSY 4

@@ -1,4 +1,4 @@
-# Lecture 10 - Exercise 1
+# Lecture 9 - Exercise 1
 ## Usage
 
 First of all to build the different executables perform following camke build steps:
