@@ -30,7 +30,7 @@ void k_sum(long n, double* vec, double* result) {
 }
 
 int main() {
-    long n = 8*1024*1024; // must be a power of 2
+    long n = 1024*1024*1024; // must be a power of 2
     double h_result = 0.0;
     double *h_vec, *d_vec, *d_tmp;
 
