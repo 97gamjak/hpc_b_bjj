@@ -13,6 +13,8 @@ Numerical error: 6.56142e-14
 
 ##Performance Analysis
 
+**NOTE** we assumed 5 flops per kernel execution
+
 ###V100
 
 theoretical peak performance = 7.45 TFLOPS/s

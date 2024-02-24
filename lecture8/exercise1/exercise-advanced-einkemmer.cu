@@ -71,7 +71,7 @@ int main() {
     if(fabs(h_result - pow(M_PI,2)/6.0) < 1e-5) {
         cout << "Correct!" << endl;
     } else {
-        cout << "The computed result does not match with the expected result ("
+        cout << "The computed result45101 does not match with the expected result ("
              << pow(M_PI,2)/6.0 << ")" << endl;
     }
 
