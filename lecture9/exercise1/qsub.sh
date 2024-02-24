@@ -4,9 +4,10 @@
 #SBATCH -N 1 # 1 node
 #SBATCH -t 00:05:00 # maximal run time of the job
 module load cuda
+module load gnu7
 
 export PATH_KP=kokkos-tools/profiling/simple-kernel-timer
-export KOKKOS_PROFILE_LIBRARY=$PATH_KP/libkp_kernel_timer.so
+export KOKKOS_PROFILE_LIBRARY=$PATH_KP/kp_kernel_timer.so
 export PATH=$PATH:$PATH_KP
 
 build_gpu/vecadd_3d_layoutleft

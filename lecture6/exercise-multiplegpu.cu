@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <stdio.h>
 
 #include "../cuda_error_check.h"
 
