@@ -32,6 +32,6 @@
     - [Exercise 1](lecture10/exercise1/)
     - [Exercise 2](lecture10/exercise2/)
     - [Exercise 3](lecture10/exercise3/)
-- [Lecture 11](lecture11/)
+- [Lecture 11](lecture11/exercise1_and_2.jl)
 
 Please note that not all lectures and exercises have a README file.
