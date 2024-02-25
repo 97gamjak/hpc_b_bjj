@@ -40,22 +40,26 @@ cd ../../..
 ## Performance
 ### Overview Total Execution Time
 
-GPU layout left:   0.50849 seconds
-GPU layout right:  0.64102 seconds
-CPU layout left:  52.59279 seconds
-CPU layout right: 13.28428 seconds
+| Layout | Time |
+| :--- | :---: |
+| GPU layout left:  |  0.50849 seconds |
+| GPU layout right: |  0.64102 seconds |
+| CPU layout left:  | 52.59279 seconds |
+| CPU layout right: | 13.28428 seconds |
 
-###Performance in GB/s of the <*vecadd*> kernel
+### Performance in GB/s of the <*vecadd*> kernel
 
 total of n=2⁹\*2⁹\*2⁹ double entries -> 1.073741824 GB
 
-GPU layout left:   280.937 GB/s
-GPU layout right:   19.622 GB/s
-CPU layout left:     0.034 GB/s
-CPU layout right:    0.149 GB/s
+| Layout | Performance |
+| :--- | :---: |
+|GPU layout left: |  280.937 GB/s|
+|GPU layout right:|   19.622 GB/s|
+|CPU layout left: |    0.034 GB/s|
+|CPU layout right:|    0.149 GB/s|
 
 ### GPU Layout Left
-
+```bash
 (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
 
 Kernels: 
@@ -80,9 +84,9 @@ Total Time in Kokkos kernels:                                       0.27279 seco
    -> Time outside Kokkos kernels:                                  0.23570 seconds
    -> Percentage in Kokkos kernels:                                   53.65 %
 Total Calls to Kokkos Kernels:                                            6
-
+```
 ### GPU Layout Right
-
+```bash
 (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
 
 Kernels: 
@@ -107,9 +111,10 @@ Total Time in Kokkos kernels:                                       0.40482 seco
    -> Time outside Kokkos kernels:                                  0.23619 seconds
    -> Percentage in Kokkos kernels:                                   63.15 %
 Total Calls to Kokkos Kernels:                                            6
+```
 
 ### CPU Layout Left
-
+```bash
  (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
 
 Kernels: 
@@ -132,11 +137,13 @@ Total Time in Kokkos kernels:                                      52.58564 seco
    -> Time outside Kokkos kernels:                                  0.00715 seconds
    -> Percentage in Kokkos kernels:                                   99.99 %
 Total Calls to Kokkos Kernels:                                            5
-
+```
 
 ### CPU Layout Right
 
+```bash
  (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
+
 
 Kernels: 
 
@@ -158,3 +165,4 @@ Total Time in Kokkos kernels:                                      13.27729 seco
    -> Time outside Kokkos kernels:                                  0.00699 seconds
    -> Percentage in Kokkos kernels:                                   99.95 %
 Total Calls to Kokkos Kernels:                                            5
+```
