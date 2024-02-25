@@ -5,8 +5,8 @@
 ## Table of Contents
 
 - [Lecture 1](lecture1/)
-    - [Exercise 1](lecture1/exercise1/)
-    - [Exercise 2](lecture1/exercise2/)
+    - [Exercise 1](lecture1/exercise1/deviceQuery.cu)
+    - [Exercise 2](lecture1/exercise2/vec_add.cu)
 - [Lecture 2](lecture2/)
     - [Exercise 1](lecture2/exercise1/) - [README](lecture2/exercise1/README.md)
     - [Exercise 2](lecture2/exercise2/) - [README](lecture2/exercise2/README.md)
@@ -18,9 +18,9 @@
     - [Exercise 2](lecture4/exercise2/) - [README](lecture4/exercise2/README.md)
     - [Exercise 3](lecture4/exercise3/) - [README](lecture4/exercise3/README.md)
 - [Lecture 5](lecture5/)
-    - [Exercise 1](lecture5/exercise1/)
-    - [Exercise 2](lecture5/exercise2/)
-    - [Exercise 3](lecture5/exercise3/)
+    - [Exercise 1](lecture5/exercise1/matvec.cpp)
+    - [Exercise 2](lecture5/exercise2/cufft.cu)
+    - [Exercise 3](lecture5/exercise3/cusparse.cu)
 - [Lecture 6](lecture6/exercise-multiplegpu.cu)
 - [Lecture 7](lecture7/) - [README](lecture7/README.md)
 - [Lecture 8](lecture8/)
