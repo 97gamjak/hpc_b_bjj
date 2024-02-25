@@ -5,9 +5,12 @@
 ## Table of Contents
 
 - [Lecture 1](lecture1/)
+    - [Exercise 1](lecture1/exercise1/)
+    - [Exercise 2](lecture1/exercise2/)
 - [Lecture 2](lecture2/)
     - [Exercise 1](lecture2/exercise1/) - [README](lecture2/exercise1/README.md)
     - [Exercise 2](lecture2/exercise2/) - [README](lecture2/exercise2/README.md)
+    - [Exercise 3](lecture2/exercise3/)
 - [Lecture 3](lecture3/) - [README](lecture3/README.md)
     - [Exercise Efficiency](lecture3/exercise-efficiency.cu)
 - [Lecture 4](lecture4/)
