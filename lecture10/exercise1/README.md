@@ -34,36 +34,35 @@ cd ../../..
 
 ## Output
 ```bash
-(Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
+ (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
 -------------------------------------------------------------------------
 
 Regions: 
 
 - KokkosBlas::dot[ETI]
- (REGION)   0.010096 1 0.010096 24.445099 6.570528
+ (REGION)   0.005058 1 0.005058 25.599720 7.521263
 
 -------------------------------------------------------------------------
 Kernels: 
 
-- fill_vec
- (ParFor)   0.010949 1 0.010949 26.510573 7.125701
-- KokkosBlas::dot<1D>
- (ParRed)   0.010092 1 0.010092 24.435285 6.567890
 - dot_product
- (ParRed)   0.010089 1 0.010089 24.427781 6.565873
+ (ParRed)   0.005043 1 0.005043 25.523699 7.498928
+- KokkosBlas::dot<1D>
+ (ParRed)   0.005039 1 0.005039 25.503186 7.492901
+- fill_vec
+ (ParFor)   0.004840 1 0.004840 24.496814 7.197226
 - Kokkos::View::initialization [x] via memset
- (ParFor)   0.005090 1 0.005090 12.324149 3.312573
+ (ParFor)   0.002424 1 0.002424 12.268317 3.604463
 - Kokkos::View::initialization [y] via memset
- (ParFor)   0.005081 1 0.005081 12.302213 3.306676
+ (ParFor)   0.002412 1 0.002412 12.207983 3.586736
 
 -------------------------------------------------------------------------
 Summary:
 
-Total Execution Time (incl. Kokkos + non-Kokkos):                   0.15366 seconds
-Total Time in Kokkos kernels:                                       0.04130 seconds
-   -> Time outside Kokkos kernels:                                  0.11236 seconds
-   -> Percentage in Kokkos kernels:                                   26.88 %
+Total Execution Time (incl. Kokkos + non-Kokkos):                   0.06725 seconds
+Total Time in Kokkos kernels:                                       0.01976 seconds
+   -> Time outside Kokkos kernels:                                  0.04749 seconds
+   -> Percentage in Kokkos kernels:                                   29.38 %
 Total Calls to Kokkos Kernels:                                            5
 
--------------------------------------------------------------------------
 ```
