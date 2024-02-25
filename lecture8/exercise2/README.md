@@ -1,4 +1,6 @@
-# Performance V100 vs A100
+# Lecture 8 - Exercise 2
+
+##  Performance V100 vs A100
 
 ```bash
 V100 naive: 0.483495s fast: 0.548329s
