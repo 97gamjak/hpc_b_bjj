@@ -13,50 +13,59 @@ using namespace std;
 
 void initialize_x(double *x, int n) {
     for (int i = 0; i < n; i++) {
-        x[i] = i * (1.0 / (n)) * (2 * M_PI);
+        x[i] = i * (1.0 / double(n)) * (2 * M_PI);
     }
 }
 
-void initialize_f_hat(cufftComplex *f, double *x, int n) {
+void initialize_f(cufftDoubleComplex *f, double *x, int n) {
     for (int i = 0; i < n; i++) {
-        f[i].x = sin(x[i]);
+        f[i].x = cos(x[i]);
     }
 }
 
 void init_k(double *k, int n) {
     for (int i = 0; i <= n/2; i++) {
-        k[i] = i * (1.0 / (n)) * (2 * M_PI);
+        k[i] = i;
     }
-    for (int i = n/2 +1; i < n; i++) {
-        k[i] = (i - n) * (1.0 / (n)) * (2 * M_PI);
+    for (int i = n/2 + 1; i < n; i++) {
+        k[i] = (i - n);
     }
+}
+
+void verify_u(cufftDoubleComplex *u, double *x, int n) {
+    for (int i = 0; i < n; i++) {
+        double u_exact = cos(x[i]);
+        double u_approx = u[i].x; // -cos(x[i]);
+        if (fabs(u_exact + u_approx) > 1e-6) {
+            cout << "Verification failed at i = " << i << endl;
+            cout << "Exact: " << u_exact << " Approx: " << u_approx << endl;
+            exit(1);
+        }
+    }
+    cout << "Verification passed!" << endl;
 }
 
 // ------------------ Main ------------------
 int main(int argc, char **argv) {
-    int n = 1 << 4;
+    int n = 1 << 28;
     double *x;
-    cufftComplex *f, *f_hat, *u, *u_hat;
+    cufftDoubleComplex *f_hat, *u_hat;
+    cufftDoubleComplex *f, *u;
 
     gpuErrorCheck(cudaMallocManaged(&x, n * sizeof(double)));
-    gpuErrorCheck(cudaMallocManaged(&f, n * sizeof(cufftComplex)));
-    gpuErrorCheck(cudaMallocManaged(&f_hat, n * sizeof(cufftComplex)));
-    gpuErrorCheck(cudaMallocManaged(&u, n * sizeof(cufftComplex)));
-    gpuErrorCheck(cudaMallocManaged(&u_hat, n * sizeof(cufftComplex)));
+    gpuErrorCheck(cudaMallocManaged(&f, n * sizeof(cufftDoubleComplex)));
+    gpuErrorCheck(cudaMallocManaged(&f_hat, n * sizeof(cufftDoubleComplex)));
+    gpuErrorCheck(cudaMallocManaged(&u, n * sizeof(cufftDoubleComplex)));
+    gpuErrorCheck(cudaMallocManaged(&u_hat, n * sizeof(cufftDoubleComplex)));
 
     initialize_x(x, n);
-    initialize_f_hat(f, x, n);
-
-    for (int i = 0; i < n; i++) {
-        cout << f[i].x << " ";
-    }
-    cout << endl;
+    initialize_f(f, x, n);
 
     cufftHandle handle;
-    CUFFT_ASSERT(cufftPlan1d(&handle, n, CUFFT_C2C, 1));
+    CUFFT_ASSERT(cufftPlan1d(&handle, n, CUFFT_Z2Z, 1));
 
     // transform f to f_hat
-    CUFFT_ASSERT(cufftExecC2C(handle, f, f_hat, CUFFT_FORWARD));
+    CUFFT_ASSERT(cufftExecZ2Z(handle, f, f_hat, CUFFT_FORWARD));
     cudaDeviceSynchronize();
 
     // Initialize k vector
@@ -64,29 +73,22 @@ int main(int argc, char **argv) {
     gpuErrorCheck(cudaMallocManaged(&k, n * sizeof(double)));
     init_k(k, n);
 
-    // print k values
-    for (int i = 0; i < n; i++) {
-        cout << k[i] << " ";
-    }
-    cout << endl;
-
     for (int i = 1; i < n; i++) {
-        u_hat[i].x = -f_hat[i].x / (4 * M_PI * M_PI * k[i] * k[i]);
-        u_hat[i].y = -f_hat[i].y / (4 * M_PI * M_PI * k[i] * k[i]);
+        u_hat[i].x = -f_hat[i].x / (k[i] * k[i] * n);
+        u_hat[i].y = -f_hat[i].y / (k[i] * k[i] * n);
     }
 
-    u_hat[0].x = 0;
-    u_hat[0].y = 0;
+    u_hat[0].x = f_hat[0].x;
+    u_hat[0].y = f_hat[0].y;
 
-    // transform u_hat to u
-    CUFFT_ASSERT(cufftExecC2C(handle, u_hat, u, CUFFT_INVERSE));
     cudaDeviceSynchronize();
 
-    // Print u values
-    for (int i = 0; i < n; i++) {
-        cout << u[i].x << " ";
-    }
-    cout << endl;
+    // transform u_hat to u
+    CUFFT_ASSERT(cufftExecZ2Z(handle, u_hat, u, CUFFT_INVERSE));
+    cudaDeviceSynchronize();
+
+    // Verify u
+    verify_u(u, x, n);
 
     // Free the memory
     gpuErrorCheck(cudaFree(x));
