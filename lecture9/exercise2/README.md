@@ -31,6 +31,8 @@ make
 cd ../../..
 ```
 
+## Performance of cusparse
+0.0112292 s
 
 ## Performance of spmv
 

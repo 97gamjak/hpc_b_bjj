@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
     Kokkos::initialize(argc, argv);
     {
-        int size = 100;
+        int size = 1 << 15;
 
         Kokkos::View<double **> A("A", size, size);
         Kokkos::View<double *> x("x", size);

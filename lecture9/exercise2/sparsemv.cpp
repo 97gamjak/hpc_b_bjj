@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     Kokkos::initialize(argc, argv);
     {
-        int n = 1 << 2;
+        int n = 1 << 27;
         int num_rows = n;
         int num_cols = n;
         int nnz = 3 * n - 2;
