@@ -67,7 +67,7 @@ void print_mat_csr(int A_num_rows,
 // initialize the dense vector
 void initDenseVector(int n, REAL* x) {
     for (int i = 0; i < n; i++) {
-        x[i] = sin(i / (double)n * M_PI);
+        x[i] = sin(i / (double)n * M_PI * 2.0);
     }
 }
 
