@@ -1,4 +1,4 @@
-# Lecture 9 - Exercise 1
+# Lecture 10 - Exercise 2
 ## Usage
 
 First of all to build the different executables perform following camke build steps:
@@ -10,15 +10,9 @@ module load cuda
 module load cmake
 module load gnu8
 
-mkdir build_gpu
-cd build_gpu
+mkdir build
+cd build
 cmake -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_VOLTA70=ON ..
-make
-cd ..
-
-mkdir build_cpu
-cd build_cpu
-cmake ..
 make
 cd ..
 ```

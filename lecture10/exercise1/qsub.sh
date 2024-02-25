@@ -10,4 +10,4 @@ export PATH_KP=kokkos-tools/profiling/simple-kernel-timer
 export KOKKOS_PROFILE_LIBRARY=$PATH_KP/kp_kernel_timer.so
 export PATH=$PATH:$PATH_KP
 
-build/matvecmul
+build/dot
