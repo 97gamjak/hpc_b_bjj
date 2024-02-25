@@ -1,4 +1,8 @@
- (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
+# Lecture 10 Exercise 1
+
+## Output
+```bash
+(Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
 -------------------------------------------------------------------------
 
 Regions: 
@@ -30,3 +34,4 @@ Total Time in Kokkos kernels:                                       0.04130 seco
 Total Calls to Kokkos Kernels:                                            5
 
 -------------------------------------------------------------------------
+```
