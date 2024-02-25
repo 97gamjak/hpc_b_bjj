@@ -4,7 +4,7 @@ LDFLAGS = -lcufft
 
 all: cufft
 
-cufft: cufft.cpp
+cufft: cufft.cu
 	$(NVCC) $(NVCCFLAGS) -o $@ $^ $(LDFLAGS)
 
 clean:

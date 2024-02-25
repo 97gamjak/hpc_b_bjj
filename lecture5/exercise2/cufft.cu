@@ -1,8 +1,7 @@
-#include <cufft.h>
 #include <iostream>
 #include <cuda_runtime.h>
 #include <math.h>
-#include <cuda.h>
+#include <cufft.h>
 #include "../../cuda_error_check.h"
 
 using namespace std;
@@ -25,18 +24,17 @@ void initialize_f_hat(cufftComplex *f, double *x, int n) {
 }
 
 void init_k(double *k, int n) {
-    for (int i = 1; i < n/2; i++) {
-        k[i] = i;
+    for (int i = 0; i <= n/2; i++) {
+        k[i] = i * (1.0 / (n)) * (2 * M_PI);
     }
-    for (int i = n/2; i < n; i++) {
-        k[i] = i - n;
+    for (int i = n/2 +1; i < n; i++) {
+        k[i] = (i - n) * (1.0 / (n)) * (2 * M_PI);
     }
 }
 
-
 // ------------------ Main ------------------
 int main(int argc, char **argv) {
-    int n = 1 << 3;
+    int n = 1 << 4;
     double *x;
     cufftComplex *f, *f_hat, *u, *u_hat;
 
@@ -66,10 +64,19 @@ int main(int argc, char **argv) {
     gpuErrorCheck(cudaMallocManaged(&k, n * sizeof(double)));
     init_k(k, n);
 
+    // print k values
+    for (int i = 0; i < n; i++) {
+        cout << k[i] << " ";
+    }
+    cout << endl;
+
     for (int i = 1; i < n; i++) {
         u_hat[i].x = -f_hat[i].x / (4 * M_PI * M_PI * k[i] * k[i]);
         u_hat[i].y = -f_hat[i].y / (4 * M_PI * M_PI * k[i] * k[i]);
     }
+
+    u_hat[0].x = 0;
+    u_hat[0].y = 0;
 
     // transform u_hat to u
     CUFFT_ASSERT(cufftExecC2C(handle, u_hat, u, CUFFT_INVERSE));
