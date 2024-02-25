@@ -72,12 +72,19 @@ void initDenseVector(int n, REAL* x) {
 }
 
 int main(void) {
-    int n = 1 << 4;
+    int n = 1 << 27;
     int A_num_rows = n;
     int A_num_cols = n;
     int A_nnz = 3 * n - 2;
 
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+
     cout << "nrows: " << A_num_rows << "\nncols: " << A_num_cols << endl;
+
+    // start timing for SpMV
+    cudaEventRecord(start, 0);
 
     // init library
     cusparseHandle_t handle;
@@ -141,7 +148,7 @@ int main(void) {
     cusparseDnVecDescr_t d_vecdesc_y;
     CUSPARSE_ASSERT(cusparseCreateDnVec(&d_vecdesc_y, A_num_rows, d_y, CUDA_REAL));
 
-    print_vec(h_x, A_num_cols, "X");
+    // print_vec(h_x, A_num_cols, "X");
 
     // determine if we need some external storage space
     void* d_buffer;
@@ -185,6 +192,9 @@ int main(void) {
         )
     );
 
+    // stop timing for SpMV
+    cudaEventRecord(stop, 0);
+
     gpuErrorCheck(cudaDeviceSynchronize());
 
     CUSPARSE_ASSERT(cusparseDestroySpMat(d_matdesc_A));
@@ -194,7 +204,7 @@ int main(void) {
 
     // copy result back to host and print
     gpuErrorCheck(cudaMemcpy(h_y, d_y, A_num_rows * sizeof(REAL), cudaMemcpyDeviceToHost));
-    print_vec(h_y, A_num_rows, "Y");
+    // print_vec(h_y, A_num_rows, "Y");
 
     // free memory
     free(h_A_csr_offsets);
@@ -203,12 +213,23 @@ int main(void) {
     free(h_x);
     free(h_y);
 
+    // free device memory
     gpuErrorCheck(cudaFree(d_A_csr_offsets));
     gpuErrorCheck(cudaFree(d_A_csr_col_idx));
     gpuErrorCheck(cudaFree(d_A_values));
     gpuErrorCheck(cudaFree(d_x));
     gpuErrorCheck(cudaFree(d_y));
     gpuErrorCheck(cudaFree(d_buffer));
+
+    // print timing
+    cudaEventSynchronize(stop);
+    float time;
+    cudaEventElapsedTime(&time, start, stop);
+    cout << "TIME: " << time * 1e-3 << " s" << endl;
+
+    // destroy events
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
 
     return EXIT_SUCCESS;
 }
