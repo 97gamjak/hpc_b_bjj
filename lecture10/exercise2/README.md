@@ -32,6 +32,7 @@ cd ../../..
 ```
 
 ## Ouput
+```bash
  (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
 -------------------------------------------------------------------------
 
@@ -72,3 +73,4 @@ Total Time in Kokkos kernels:                                       0.03339 seco
 Total Calls to Kokkos Kernels:                                            9
 
 -------------------------------------------------------------------------
+```

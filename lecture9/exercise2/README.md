@@ -35,7 +35,7 @@ cd ../../..
 0.0112292 s
 
 ## Performance of spmv
-
+```bash
  (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
 -------------------------------------------------------------------------
 
@@ -74,5 +74,4 @@ Total Time in Kokkos kernels:                                       0.00016 seco
 Total Calls to Kokkos Kernels:                                            8
 
 -------------------------------------------------------------------------
-
-## Performance of Cusparse
+```
